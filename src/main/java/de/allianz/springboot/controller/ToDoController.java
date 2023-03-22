@@ -1,9 +1,12 @@
 package de.allianz.springboot.controller;
 
+import de.allianz.springboot.dto.ToDoCreationRequest;
+import de.allianz.springboot.dto.ToDoUpdateRequest;
 import de.allianz.springboot.entity.ToDo;
 import de.allianz.springboot.repository.ToDoRepository;
 import de.allianz.springboot.service.ToDoService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +20,18 @@ public class ToDoController {
     private final ToDoService toDoService;
 
     @PostMapping
-    public ToDo createToDo(@RequestBody ToDo toDo){
+    public ToDo createToDo(@Valid ToDoCreationRequest toDoCreationRequest){
+        ToDo toDo = new ToDo();
+        toDo.setDescription(toDoCreationRequest.getDescription());
         return this.toDoService.createToDo(toDo);
     }
 
     @PutMapping
-    public ToDo updateToDo(@RequestBody ToDo toDo){
+    public ToDo updateToDo(@Valid ToDoUpdateRequest toDoUpdateRequest){
+        ToDo toDo = new ToDo();
+        //id
+        //decription
+        //status
         return this.toDoService.updateToDo(toDo);
     }
 
