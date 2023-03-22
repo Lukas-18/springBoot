@@ -1,7 +1,9 @@
 package de.allianz.springboot.database;
 
+import de.allianz.springboot.controller.ToDoController;
 import de.allianz.springboot.entity.ToDo;
 import de.allianz.springboot.repository.ToDoRepository;
+import de.allianz.springboot.service.ToDoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

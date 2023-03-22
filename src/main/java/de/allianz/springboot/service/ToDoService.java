@@ -14,13 +14,11 @@ public class ToDoService {
 
     private final ToDoRepository toDoRepository;
 
-    public void createToDo(ToDo toDo){
-        if(toDo.getId() != null){
-            this.toDoRepository.save(toDo);
-        }
+    public ToDo createToDo(ToDo toDo){
+        return this.toDoRepository.save(toDo);
     }
 
-    public void updateToDo(ToDo toDo){
+    public ToDo updateToDo(ToDo toDo){
         ToDo updatedToDo = toDoRepository.findById(toDo.getId()).orElseThrow(
                 () -> new EntityNotFoundException("ToDo not found!")
         );
@@ -30,7 +28,7 @@ public class ToDoService {
         updatedToDo.setDueDate(toDo.getDueDate());
         updatedToDo.setPriority(toDo.getPriority());
         updatedToDo.setIsDone(toDo.getIsDone());
-        this.toDoRepository.save(updatedToDo);
+        return this.toDoRepository.save(updatedToDo);
     }
 
     public void deleteToDo(Long id){
