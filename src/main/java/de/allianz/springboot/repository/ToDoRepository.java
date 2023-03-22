@@ -12,10 +12,12 @@ public interface ToDoRepository  extends CrudRepository<ToDo, Long> {
     //derived methods = abgeleitete Methoden, im Hintergrund Java Methode wird übersetzt in SQL Statement zur Laufzeit
     List<ToDo> findAllByIsDoneIsTrue();
 
+    // Im Hintergrund hinter der derived method passiert folgendes:
+    // @Query(value = "SELECT * FROM to_do WHERE to_do.status = false", nativeQuery = true)
     List<ToDo> findAllByIsDoneIsFalse();
 
 
-    //Im Hintergrund hinter der derived method passiert folgendes:
+    //manuell, d.h. ohne derived method, könnte man es wie folgt machen: (Das passiert nämlich im Hintergrund von der derived method)
     //@Query(value = "SELECT COUNT(*) FROM to_do WHERE to_do.status = true", nativeQuery = true)
     //Long manualCount();
     Long countAllByIsDoneIsTrue();
