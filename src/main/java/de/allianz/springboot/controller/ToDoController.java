@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,29 +19,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ToDoController {
     private final ToDoService toDoService;
+    private final ModelMapper modelMapper;
 
     @PostMapping
     public ToDo createToDo(@Valid @RequestBody ToDoCreationRequest toDoCreationRequest){
-        ToDo toDo = new ToDo();
-        toDo.setTitle(toDoCreationRequest.getTitle());
-        toDo.setDescription(toDoCreationRequest.getDescription());
-        toDo.setCreationDate(toDoCreationRequest.getCreationDate());
-        toDo.setDueDate(toDoCreationRequest.getDueDate());
-        toDo.setPriority(toDoCreationRequest.getPriority());
-        toDo.setIsDone(toDoCreationRequest.getIsDone());
-        return this.toDoService.createToDo(toDo);
+        return this.toDoService.createToDo(modelMapper.map(toDoCreationRequest, ToDo.class));
     }
 
     @PutMapping
     public ToDo updateToDo(@Valid @RequestBody ToDoUpdateRequest toDoUpdateRequest){
-        ToDo toDo = new ToDo();
-        toDo.setId(toDoUpdateRequest.getId());
-        toDo.setTitle(toDoUpdateRequest.getTitle());
-        toDo.setDescription(toDoUpdateRequest.getDescription());
-        toDo.setCreationDate(toDoUpdateRequest.getCreationDate());
-        toDo.setDueDate(toDoUpdateRequest.getDueDate());
-        toDo.setPriority(toDoUpdateRequest.getPriority());
-        toDo.setIsDone(toDoUpdateRequest.getIsDone());
+        ToDo toDo = this.toDoService.getId(toDoUpdateRequest.getId());
+        modelMapper.map(toDoUpdateRequest, toDo);
         return this.toDoService.updateToDo(toDo);
     }
 

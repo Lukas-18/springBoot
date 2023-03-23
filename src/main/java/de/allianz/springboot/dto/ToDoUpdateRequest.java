@@ -20,8 +20,8 @@ public class ToDoUpdateRequest {
     private final String title;
     @NotBlank
     private final String description;
-    @NotBlank
-    private final String creationDate;
+    //@NotBlank
+    //private final String creationDate;
     @NotBlank
     private final String dueDate;
     @NotNull

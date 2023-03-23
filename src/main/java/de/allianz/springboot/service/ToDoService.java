@@ -64,4 +64,8 @@ public class ToDoService {
     public Long getNumberOfOpenToDos(){
         return this.toDoRepository.countAllByIsDone(false);
     }
+
+    public ToDo getId(Long id){
+        return toDoRepository.findById(id).orElseThrow();
+    }
 }
