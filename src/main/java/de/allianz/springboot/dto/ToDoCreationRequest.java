@@ -5,6 +5,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 //DTO = Data Transfer Object
@@ -21,7 +22,8 @@ public class ToDoCreationRequest {
     private final String creationDate;
     @NotBlank
     private final String dueDate;
-    @NotBlank
+    @NotNull
+    @Positive
     private final Integer priority;
     @NotNull
     private final Boolean isDone;

@@ -24,7 +24,8 @@ public class ToDoUpdateRequest {
     private final String creationDate;
     @NotBlank
     private final String dueDate;
-    @NotBlank
+    @NotNull
+    @Positive
     private final Integer priority;
     @NotNull
     private final Boolean isDone;

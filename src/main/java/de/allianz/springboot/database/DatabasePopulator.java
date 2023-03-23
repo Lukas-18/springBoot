@@ -21,7 +21,7 @@ public class DatabasePopulator implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        final ToDo todo1 = new ToDo(null, "Wäsche", "Wäsche waschen", "21.03.2023", "24.03.2023", 2, false);
+        final ToDo todo1 = new ToDo(null, "Wäsche", "Wäsche waschen", "21.03.2023", "24.03.2023", 2, true);
         final ToDo todo2 = new ToDo(null, "Putzen", "Wohnung putzen", "21.03.2023", "31.03.2023", 1, false);
         final ToDo todo3 = new ToDo(null, "Kochen", "Abendessen kochen", "21.03.2023", "21.03.2023", 3, false);
 

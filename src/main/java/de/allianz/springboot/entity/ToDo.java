@@ -18,17 +18,17 @@ public class ToDo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Name is mandatory!")
+
     private String title;
-    @NotBlank(message = "Name is mandatory!")
+
     private String description;
-    @NotBlank(message = "Name is mandatory!")
+
     private String creationDate;
-    @NotBlank(message = "Name is mandatory!")
+
     private String dueDate;
-    @NotBlank(message = "Name is mandatory!")
+
     private Integer priority;
-    @NotNull
+
     private Boolean isDone;
 
 }

@@ -20,18 +20,27 @@ public class ToDoController {
     private final ToDoService toDoService;
 
     @PostMapping
-    public ToDo createToDo(@Valid ToDoCreationRequest toDoCreationRequest){
+    public ToDo createToDo(@Valid @RequestBody ToDoCreationRequest toDoCreationRequest){
         ToDo toDo = new ToDo();
+        toDo.setTitle(toDoCreationRequest.getTitle());
         toDo.setDescription(toDoCreationRequest.getDescription());
+        toDo.setCreationDate(toDoCreationRequest.getCreationDate());
+        toDo.setDueDate(toDoCreationRequest.getDueDate());
+        toDo.setPriority(toDoCreationRequest.getPriority());
+        toDo.setIsDone(toDoCreationRequest.getIsDone());
         return this.toDoService.createToDo(toDo);
     }
 
     @PutMapping
-    public ToDo updateToDo(@Valid ToDoUpdateRequest toDoUpdateRequest){
+    public ToDo updateToDo(@Valid @RequestBody ToDoUpdateRequest toDoUpdateRequest){
         ToDo toDo = new ToDo();
-        //id
-        //decription
-        //status
+        toDo.setId(toDoUpdateRequest.getId());
+        toDo.setTitle(toDoUpdateRequest.getTitle());
+        toDo.setDescription(toDoUpdateRequest.getDescription());
+        toDo.setCreationDate(toDoUpdateRequest.getCreationDate());
+        toDo.setDueDate(toDoUpdateRequest.getDueDate());
+        toDo.setPriority(toDoUpdateRequest.getPriority());
+        toDo.setIsDone(toDoUpdateRequest.getIsDone());
         return this.toDoService.updateToDo(toDo);
     }
 
