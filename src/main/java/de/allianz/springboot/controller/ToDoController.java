@@ -43,6 +43,11 @@ public class ToDoController {
         return (List<ToDo>) this.toDoService.getAllToDos();
     }
 
+    @GetMapping("/{id}")
+    public ToDo getToDoById(@PathVariable ("id") Long id){
+        return this.toDoService.getId(id);
+    }
+
     @GetMapping("/isDone")
     public List<ToDo> getDoneToDos(){
         return this.toDoService.getDoneToDos();

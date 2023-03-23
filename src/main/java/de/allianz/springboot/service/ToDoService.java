@@ -1,6 +1,7 @@
 package de.allianz.springboot.service;
 
 import de.allianz.springboot.entity.ToDo;
+import de.allianz.springboot.exceptionHandling.GlobalExceptionHandler;
 import de.allianz.springboot.repository.ToDoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +68,7 @@ public class ToDoService {
 
     public ToDo getId(Long id){
         return toDoRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Not found!")
+                () -> new EntityNotFoundException("There is no Entity with this ID!")
         );
     }
 }

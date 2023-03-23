@@ -1,7 +1,11 @@
 package de.allianz.springboot.exceptionHandling;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.apache.logging.log4j.spi.LoggerRegistry;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-@Log
+@RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /*
@@ -22,10 +26,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
     */
 
+    private  final MessageSource messageSource;
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> entityNotFoundException(RuntimeException exception, WebRequest request) {
         //System.out.println("ENTITY NOT FOUND!");
         //return null;
-        return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        String message = messageSource.getMessage("exception.idNotFound", null, LocaleContextHolder.getLocale());
+        return handleExceptionInternal(exception, message, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 }
