@@ -26,6 +26,6 @@ public interface ToDoRepository  extends CrudRepository<ToDo, Long> {
 
     //generischer Ansatz:
     // (Also anstatt: "Long countAllByIsDoneIsTrue();" & "Long countAllByIsDoneIsFalse();")
-    Long countAllByIsDone(Boolean staus);
+    Long countAllByIsDone(Boolean status);
 
 }
