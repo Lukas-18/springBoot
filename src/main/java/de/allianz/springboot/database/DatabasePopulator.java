@@ -6,6 +6,7 @@ import de.allianz.springboot.repository.ToDoRepository;
 import de.allianz.springboot.service.ToDoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +18,13 @@ public class DatabasePopulator implements CommandLineRunner {
 
     // DEPENDENCY INJECTION
     private final ToDoRepository toDoRepository;
+    @Value("${meinKey}")
+    public String meinKey;
 
     @Override
     public void run(String... args) throws Exception {
+
+        System.out.println(meinKey);
 
         final ToDo todo1 = new ToDo(null, "Wäsche", "Wäsche waschen", "21.03.2023", "24.03.2023", 2, true);
         final ToDo todo2 = new ToDo(null, "Putzen", "Wohnung putzen", "21.03.2023", "31.03.2023", 1, false);
