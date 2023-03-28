@@ -4,12 +4,11 @@ import de.allianz.springboot.entity.ToDo;
 import de.allianz.springboot.service.ToDoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -17,11 +16,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+
 @WebMvcTest(ToDoController.class)
 public class ToDoControllerTest {
 
@@ -47,28 +47,87 @@ public class ToDoControllerTest {
         this.toDoList.addAll(Arrays.asList(todo1, todo2, todo3));
     }
 
-    // WIESO ÜBERGIBT MAN DIE ID MANUELL UND NICHT "NULL" ??
-
     @Test
-    public void createToDo(){
+    public void createToDo() throws Exception {
+        ToDo todo4 = new ToDo(4L, "Neu", "Neues ToDo", "21.03.2023", "24.03.2023", 2, false);
+        when(this.toDoService.createToDo(any())).thenReturn(todo4);
+        when(this.modelMapper.map(any(), any())).thenReturn(todo4);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/todo")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                                    {
+                                        "id": null,
+                                        "title": "Neu",
+                                        "description": "Neues ToDo",
+                                        "creationDate": "21.03.2023",
+                                        "dueDate": "24.03.2023",
+                                        "priority": 2,
+                                        "isDone": false
+                                    }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(
+                        """
+                                    {
+                                        "id": 4,
+                                        "title": "Neu",
+                                        "description": "Neues ToDo",
+                                        "creationDate": "21.03.2023",
+                                        "dueDate": "24.03.2023",
+                                        "priority": 2,
+                                        "isDone": false
+                                    }
+                                """
+                ));
 
     }
 
     @Test
-    public void updateToDo(){
+    public void updateToDo() throws Exception{
+        ToDo updatedToDo = new ToDo(5L, "Update", "Geupdates ToDo", "21.03.2023", "24.03.2023", 2, false);
+        when(this.toDoService.updateToDo(any())).thenReturn(updatedToDo);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/todo")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                                {
+                                    "id": 5,
+                                    "title": "Update",
+                                    "description": "Geupdates ToDo",
+                                    "creationDate": "21.03.2023",
+                                    "dueDate": "24.03.2023",
+                                    "priority": 2,
+                                    "isDone": false
+                                }"""))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        """
+                                    {
+                                        "id": 5,
+                                        "title": "Update",
+                                        "description": "Geupdates ToDo",
+                                        "creationDate": "21.03.2023",
+                                        "dueDate": "24.03.2023",
+                                        "priority": 2,
+                                        "isDone": false
+                                    }
+                                """
+                ));
 
     }
 
     @Test
-    public void deleteToDo(){
-
+    public void deleteToDo() throws Exception{
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/todo/3"))
+                .andExpect(status().isNoContent());
     }
 
     @Test
     public void getAllToDos() throws Exception{
         when(this.toDoService.getAllToDos()).thenReturn(this.toDoList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/todo"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/todo"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(
                         """
@@ -106,7 +165,24 @@ public class ToDoControllerTest {
     }
 
     @Test
-    public void getToDoById(){
+    public void getToDoById() throws Exception {
+        when(this.toDoService.getId(2L)).thenReturn(this.todo2);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/todo/2"))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(
+                        """
+                                {
+                                    "id": 2,
+                                    "title": "Putzen",
+                                    "description": "Wohnung putzen",
+                                    "creationDate": "21.03.2023",
+                                    "dueDate": "31.03.2023",
+                                    "priority": 1,
+                                    "isDone": false
+                                }
+                                """
+                ));
 
     }
 }
