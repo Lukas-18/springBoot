@@ -1,5 +1,6 @@
 package de.allianz.springboot.config;
 
+import de.allianz.springboot.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,14 +20,22 @@ public class UserDetailsService {
         UserDetails userDetails = User.builder()
                 .username("user")
                 .password(passwordEncoder.encode("1234"))
-                .roles("USER_ROLE")
+                .authorities(Role.MEMBER.getGrantedAuthorities())
                 .build();
+
         UserDetails admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("12345"))
                 //.password("{noop}admin")
-                .roles("USER_ROLE", "ADMIN_ROLE")
+                .authorities(Role.ADMIN.getGrantedAuthorities())
                 .build();
-        return new InMemoryUserDetailsManager(userDetails, admin);
+
+        UserDetails analyst = User.builder()
+                .username("analyst")
+                .password(passwordEncoder.encode("12345"))
+                //.password("{noop}analyst")
+                .authorities(Role.ANALYST.getGrantedAuthorities())
+                .build();
+        return new InMemoryUserDetailsManager(userDetails, admin, analyst);
     }
 }
