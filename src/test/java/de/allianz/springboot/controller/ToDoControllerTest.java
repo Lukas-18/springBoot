@@ -1,5 +1,8 @@
 package de.allianz.springboot.controller;
 
+import de.allianz.springboot.config.PasswordEncoderConfig;
+import de.allianz.springboot.config.PasswordEncoderConfigTest;
+import de.allianz.springboot.config.SecureConfig;
 import de.allianz.springboot.entity.ToDo;
 import de.allianz.springboot.service.ToDoService;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,7 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -18,11 +24,16 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+//@Import(PasswordEncoderConfigTest.class)
 @WebMvcTest(ToDoController.class)
+//@WithMockUser
+//@ContextConfiguration(classes = {SecureConfig.class, PasswordEncoderConfig.class})
 public class ToDoControllerTest {
 
     @Autowired
@@ -48,10 +59,12 @@ public class ToDoControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void createToDo() throws Exception {
         ToDo todo4 = new ToDo(4L, "Neu", "Neues ToDo", "21.03.2023", "24.03.2023", 2, false);
         when(this.toDoService.createToDo(any())).thenReturn(todo4);
         when(this.modelMapper.map(any(), any())).thenReturn(todo4);
+
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/todo")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -81,9 +94,11 @@ public class ToDoControllerTest {
                                 """
                 ));
 
+
     }
 
     @Test
+    @WithMockUser
     public void updateToDo() throws Exception{
         ToDo updatedToDo = new ToDo(5L, "Update", "Geupdates ToDo", "21.03.2023", "24.03.2023", 2, false);
         when(this.toDoService.updateToDo(any())).thenReturn(updatedToDo);
@@ -118,12 +133,14 @@ public class ToDoControllerTest {
     }
 
     @Test
+    @WithMockUser(username="user", password="1234")
     public void deleteToDo() throws Exception{
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/todo/3"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
+    @WithMockUser
     public void getAllToDos() throws Exception{
         when(this.toDoService.getAllToDos()).thenReturn(this.toDoList);
 
@@ -165,6 +182,7 @@ public class ToDoControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getToDoById() throws Exception {
         when(this.toDoService.getId(2L)).thenReturn(this.todo2);
 
